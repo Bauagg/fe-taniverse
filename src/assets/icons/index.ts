@@ -30,3 +30,5 @@ export { default as IconCreditCard } from "./IconCreditCard";
 export { default as IconSun } from "./IconSun";
 export { default as IconMoreHorizontal } from "./IconMoreHorizontal";
 export { default as IconMessageCircle } from "./IconMessageCircle";
+export { default as IconMenu } from "./IconMenu";
+export { default as IconArrowRight } from "./IconArrowRight";

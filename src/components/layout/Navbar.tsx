@@ -1,7 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { Search, Bell, Menu, X, ArrowRight } from "lucide-react";
+import logo from "@/assets/image/logo.png";
 
 const NAV_LINKS = [
   { label: "Beranda", href: "/" },
@@ -13,52 +17,163 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-8">
-        {/* Logo */}
-        <Link href="/" className="text-xl font-bold text-primary flex-shrink-0">
-          Taniverse
-        </Link>
+    <>
+      <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center gap-4">
 
-        {/* Nav Links */}
-        <div className="hidden md:flex items-center gap-8 flex-1">
-          {NAV_LINKS.map(({ label, href }) => {
-            const isActive =
-              href === "/" ? pathname === "/" : pathname.startsWith(href);
-            return (
+          {/* Logo + Brand */}
+          <Link href="/" className="flex items-center gap-2 shrink-0 mr-2">
+            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-sm">
+              <Image src={logo} alt="Taniverse" height={24} width={24} className="object-contain" />
+            </div>
+            <span className="font-bold text-lg hidden sm:block tracking-tight">
+              <span style={{ color: "white", WebkitTextStroke: "0.5px #169953" }}>Tani</span>
+              <span className="text-primary">verse</span>
+            </span>
+          </Link>
+
+          {/* Search Bar – Desktop */}
+          <div className="hidden md:flex flex-1 max-w-sm">
+            <div className="relative w-full">
+              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Cari komunitas, agent, atau konten..."
+                className="w-full pl-10 pr-4 py-2 text-sm bg-gray-50 border border-gray-200 rounded-full outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-gray-400 text-gray-700"
+              />
+            </div>
+          </div>
+
+          {/* Nav Links – Desktop */}
+          <div className="hidden lg:flex items-center gap-1 flex-1 justify-center">
+            {NAV_LINKS.map(({ label, href }) => {
+              const isActive =
+                href === "/" ? pathname === "/" : pathname.startsWith(href);
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={`relative px-3 py-2 text-sm font-medium rounded-lg transition-all duration-150 ${
+                    isActive
+                      ? "text-primary"
+                      : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                  }`}
+                >
+                  {label}
+                  {isActive && (
+                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-primary rounded-full" />
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Right Side */}
+          <div className="flex items-center gap-2 ml-auto shrink-0">
+
+            {/* Search Icon – Mobile */}
+            <button
+              onClick={() => setSearchOpen((p) => !p)}
+              className="md:hidden w-9 h-9 flex items-center justify-center rounded-xl text-gray-500 hover:bg-gray-100 transition-colors"
+            >
+              <Search size={18} />
+            </button>
+
+            {/* Notification Bell */}
+            <button className="relative w-9 h-9 flex items-center justify-center rounded-xl text-gray-500 hover:bg-gray-100 transition-colors">
+              <Bell size={20} />
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white" />
+            </button>
+
+            {/* Divider */}
+            <div className="hidden md:block w-px h-6 bg-gray-200 mx-1" />
+
+            {/* Auth – Desktop */}
+            <Link
+              href="/login"
+              className="hidden md:inline-flex px-4 py-2 text-sm font-medium text-gray-600 hover:text-primary transition-colors rounded-lg hover:bg-primary/5"
+            >
+              Masuk
+            </Link>
+            <Link
+              href="/register"
+              className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 bg-primary text-white text-sm font-semibold rounded-full hover:bg-green-600 transition-all shadow-sm shadow-primary/30 hover:shadow-primary/40 hover:scale-[1.02]"
+            >
+              Daftar
+              <ArrowRight size={14} />
+            </Link>
+
+            {/* Hamburger – Mobile */}
+            <button
+              onClick={() => setMenuOpen((p) => !p)}
+              className="lg:hidden w-9 h-9 flex items-center justify-center rounded-xl text-gray-600 hover:bg-gray-100 transition-colors"
+              aria-label="Toggle menu"
+            >
+              {menuOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Search Bar – Mobile Expanded */}
+        <div className={`md:hidden overflow-hidden transition-all duration-200 ${searchOpen ? "max-h-16 opacity-100" : "max-h-0 opacity-0"}`}>
+          <div className="px-4 pb-3">
+            <div className="relative">
+              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Cari komunitas, agent, atau konten..."
+                className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-full outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-gray-400 text-gray-700"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        <div className={`lg:hidden overflow-hidden transition-all duration-300 ${menuOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}`}>
+          <div className="border-t border-gray-100 bg-white px-4 py-3 flex flex-col gap-1">
+            {NAV_LINKS.map(({ label, href }) => {
+              const isActive =
+                href === "/" ? pathname === "/" : pathname.startsWith(href);
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setMenuOpen(false)}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                    isActive
+                      ? "bg-primary/8 text-primary"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                  }`}
+                >
+                  {isActive && <span className="w-1.5 h-1.5 bg-primary rounded-full shrink-0" />}
+                  {label}
+                </Link>
+              );
+            })}
+
+            <div className="flex gap-3 mt-2 pt-3 border-t border-gray-100">
               <Link
-                key={href}
-                href={href}
-                className={`text-sm font-medium transition-colors ${
-                  isActive
-                    ? "text-primary"
-                    : "text-gray-500 hover:text-gray-800"
-                }`}
+                href="/login"
+                onClick={() => setMenuOpen(false)}
+                className="flex-1 text-center py-2.5 rounded-full text-sm font-semibold text-primary border-2 border-primary hover:bg-primary/5 transition-all"
               >
-                {label}
+                Masuk
               </Link>
-            );
-          })}
+              <Link
+                href="/register"
+                onClick={() => setMenuOpen(false)}
+                className="flex-1 text-center py-2.5 rounded-full bg-primary text-white text-sm font-semibold hover:bg-green-600 transition-all shadow-sm shadow-primary/30"
+              >
+                Daftar
+              </Link>
+            </div>
+          </div>
         </div>
-
-        {/* Auth */}
-        <div className="flex items-center gap-3 flex-shrink-0">
-          <Link
-            href="/login"
-            className="text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors"
-          >
-            Masuk
-          </Link>
-          <Link
-            href="/register"
-            className="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-xl hover:bg-green-700 transition-colors"
-          >
-            Daftar
-          </Link>
-        </div>
-      </div>
-    </nav>
+      </nav>
+    </>
   );
 }
