@@ -3,6 +3,7 @@
 import { useState } from "react";
 import PostCard from "./PostCard";
 import CommentsPanel from "./CommentsPanel";
+import CreatePostModal from "./CreatePostModal";
 import UserAvatar from "@/components/ui/UserAvatar";
 import ProfileAvatar from "@/components/ui/ProfileAvatar";
 import { IconSearch } from "@/assets/icons";
@@ -10,11 +11,10 @@ import { mockPosts, trendingProducts, suggestedUsers } from "@/lib/ecommerce-moc
 import { mockUser } from "@/lib/profile-mock";
 import Link from "next/link";
 
-const CATEGORIES = ["Semua", "Pupuk", "Pestisida", "Alat Tani", "Benih", "Organik"];
 
 export default function FeedPage() {
-  const [activeCategory, setActiveCategory] = useState("Semua");
   const [commentPost, setCommentPost] = useState<(typeof mockPosts)[0] | null>(null);
+  const [createOpen, setCreateOpen] = useState(false);
 
   return (
     <div className="bg-[#f3f2ef] min-h-[calc(100vh-64px)]">
@@ -40,25 +40,21 @@ export default function FeedPage() {
               </div>
             </div>
 
-            {/* Categories */}
+            {/* User Stats */}
             <div className="bg-white rounded-2xl shadow-sm p-4">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Kategori</p>
-              <ul className="space-y-0.5">
-                {CATEGORIES.map((cat) => (
-                  <li key={cat}>
-                    <button
-                      onClick={() => setActiveCategory(cat)}
-                      className={`w-full text-left px-3 py-2 rounded-xl text-sm transition-colors ${
-                        activeCategory === cat
-                          ? "bg-primary/10 text-primary font-semibold"
-                          : "text-gray-600 hover:bg-gray-50"
-                      }`}
-                    >
-                      {cat}
-                    </button>
-                  </li>
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Statistik Anda</p>
+              <div className="space-y-3">
+                {[
+                  { label: "Postingan", value: mockUser.posts ?? 0 },
+                  { label: "Pengikut", value: mockUser.followers ?? 0 },
+                  { label: "Mengikuti", value: mockUser.following ?? 0 },
+                ].map(({ label, value }) => (
+                  <div key={label} className="flex items-center justify-between">
+                    <span className="text-sm text-gray-500">{label}</span>
+                    <span className="text-sm font-bold text-gray-800">{value.toLocaleString("id-ID")}</span>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
 
           </aside>
@@ -66,15 +62,7 @@ export default function FeedPage() {
           {/* ── Feed ── */}
           <main className="flex-1 min-w-0 space-y-3">
 
-            {/* Composer bar */}
-            <div className="bg-white rounded-2xl shadow-sm px-4 py-3 flex items-center gap-3">
-              <ProfileAvatar initials={mockUser.initials} />
-              <button className="flex-1 text-left bg-gray-100 hover:bg-gray-200 transition-colors rounded-full px-4 py-2.5 text-sm text-gray-400">
-                Bagikan pengalaman pertanian Anda...
-              </button>
-            </div>
-
-            {/* Search */}
+            {/* Search + Create */}
             <div className="bg-white rounded-2xl shadow-sm px-4 py-2.5 flex items-center gap-2">
               <span className="text-gray-400 shrink-0"><IconSearch size={16} /></span>
               <input
@@ -82,23 +70,12 @@ export default function FeedPage() {
                 placeholder="Cari di Komunitas..."
                 className="flex-1 text-sm outline-none placeholder:text-gray-400"
               />
-            </div>
-
-            {/* Category pills (mobile) */}
-            <div className="lg:hidden flex gap-2 overflow-x-auto pb-1">
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className={`shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold transition-colors ${
-                    activeCategory === cat
-                      ? "bg-primary text-white"
-                      : "bg-white text-gray-600 shadow-sm"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
+              <button
+                onClick={() => setCreateOpen(true)}
+                className="shrink-0 flex items-center gap-1.5 px-4 py-2 bg-primary text-white text-sm font-semibold rounded-full hover:bg-green-600 transition-all shadow-sm shadow-primary/30"
+              >
+                + Buat Post
+              </button>
             </div>
 
             {/* Posts */}
@@ -109,6 +86,7 @@ export default function FeedPage() {
                 onComment={() => setCommentPost(post)}
               />
             ))}
+
 
           </main>
 
@@ -157,6 +135,7 @@ export default function FeedPage() {
       </div>
 
       <CommentsPanel post={commentPost} onClose={() => setCommentPost(null)} />
+      {createOpen && <CreatePostModal onClose={() => setCreateOpen(false)} />}
     </div>
   );
 }

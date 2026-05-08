@@ -9,7 +9,6 @@ import logo from "@/assets/image/logo.png";
 
 const NAV_LINKS = [
   { label: "Beranda", href: "/" },
-  { label: "Komunitas", href: "/komunitas" },
   { label: "Agent", href: "/agent" },
   { label: "AI", href: "/ai" },
   { label: "Profile", href: "/profile" },
@@ -36,17 +35,19 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Search Bar – Desktop */}
-          <div className="hidden md:flex flex-1 max-w-sm">
-            <div className="relative w-full">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Cari komunitas, agent, atau konten..."
-                className="w-full pl-10 pr-4 py-2 text-sm bg-gray-50 border border-gray-200 rounded-full outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-gray-400 text-gray-700"
-              />
+          {/* Search Bar – Desktop (agent only) */}
+          {pathname.startsWith("/agent") && (
+            <div className="hidden md:flex flex-1 max-w-sm">
+              <div className="relative w-full">
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Cari agent, produk, atau penjual..."
+                  className="w-full pl-10 pr-4 py-2 text-sm bg-gray-50 border border-gray-200 rounded-full outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-gray-400 text-gray-700"
+                />
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Nav Links – Desktop */}
           <div className="hidden lg:flex items-center gap-1 flex-1 justify-center">
@@ -75,13 +76,15 @@ export default function Navbar() {
           {/* Right Side */}
           <div className="flex items-center gap-2 ml-auto shrink-0">
 
-            {/* Search Icon – Mobile */}
-            <button
-              onClick={() => setSearchOpen((p) => !p)}
-              className="md:hidden w-9 h-9 flex items-center justify-center rounded-xl text-gray-500 hover:bg-gray-100 transition-colors"
-            >
-              <Search size={18} />
-            </button>
+            {/* Search Icon – Mobile (agent only) */}
+            {pathname.startsWith("/agent") && (
+              <button
+                onClick={() => setSearchOpen((p) => !p)}
+                className="md:hidden w-9 h-9 flex items-center justify-center rounded-xl text-gray-500 hover:bg-gray-100 transition-colors"
+              >
+                <Search size={18} />
+              </button>
+            )}
 
             {/* Notification Bell */}
             <button className="relative w-9 h-9 flex items-center justify-center rounded-xl text-gray-500 hover:bg-gray-100 transition-colors">
@@ -118,19 +121,21 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Search Bar – Mobile Expanded */}
-        <div className={`md:hidden overflow-hidden transition-all duration-200 ${searchOpen ? "max-h-16 opacity-100" : "max-h-0 opacity-0"}`}>
-          <div className="px-4 pb-3">
-            <div className="relative">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Cari komunitas, agent, atau konten..."
-                className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-full outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-gray-400 text-gray-700"
-              />
+        {/* Search Bar – Mobile Expanded (agent only) */}
+        {pathname.startsWith("/agent") && (
+          <div className={`md:hidden overflow-hidden transition-all duration-200 ${searchOpen ? "max-h-16 opacity-100" : "max-h-0 opacity-0"}`}>
+            <div className="px-4 pb-3">
+              <div className="relative">
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Cari agent, produk, atau penjual..."
+                  className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-full outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-gray-400 text-gray-700"
+                />
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Mobile Menu */}
         <div className={`lg:hidden overflow-hidden transition-all duration-300 ${menuOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}`}>

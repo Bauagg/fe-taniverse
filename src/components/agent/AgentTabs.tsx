@@ -28,7 +28,7 @@ export default function AgentTabs({ active, onChange }: Props) {
           }`}
         >
           <Icon size={14} />
-          {label}
+          <span className="hidden sm:inline">{label}</span>
         </button>
       ))}
     </div>

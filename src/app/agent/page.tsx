@@ -5,7 +5,8 @@ import { AGENT_PRODUCTS } from "@/lib/agent-mock";
 import AgentCard from "@/components/agent/AgentCard";
 import AgentSearchBar from "@/components/agent/AgentSearchBar";
 import AgentTabs from "@/components/agent/AgentTabs";
-import { SlidersHorizontal, ChevronDown, AlignLeft, Star } from "lucide-react";
+import { SlidersHorizontal, ChevronDown, AlignLeft, Star, LayoutDashboard, PlusCircle } from "lucide-react";
+import Link from "next/link";
 
 type Tab = "explore" | "history";
 type SortKey = "terbaru" | "termurah" | "termahal" | "rating";
@@ -96,19 +97,12 @@ export default function AgentPage() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
         {/* Toolbar */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-6">
-          <div className="w-full sm:w-52">
+        <div className="flex flex-row items-center gap-3 mb-6">
+          <div className="shrink-0">
             <AgentTabs active={tab} onChange={setTab} />
           </div>
 
-          <div className="flex items-center gap-2 ml-auto">
-            <span className="text-sm text-gray-400 hidden sm:block">
-              <span className="font-semibold text-gray-700">
-                {filtered.length}
-              </span>{" "}
-              produk
-            </span>
-
+          <div className="flex items-center ml-auto bg-white border border-gray-200 rounded-xl shadow-sm divide-x divide-gray-200">
             {/* Sort Dropdown */}
             <div className="relative">
               <button
@@ -116,10 +110,10 @@ export default function AgentPage() {
                   setSortOpen((p) => !p);
                   setFilterOpen(false);
                 }}
-                className="flex items-center gap-1.5 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:border-primary/40 transition-colors shadow-sm"
+                className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-600 hover:text-primary hover:bg-gray-50 transition-colors rounded-l-xl"
               >
                 <AlignLeft size={14} />
-                {SORT_OPTIONS.find((s) => s.key === sort)?.label}
+                <span className="hidden sm:inline">{SORT_OPTIONS.find((s) => s.key === sort)?.label}</span>
                 <ChevronDown size={14} />
               </button>
               {sortOpen && (
@@ -131,11 +125,10 @@ export default function AgentPage() {
                         setSort(key);
                         setSortOpen(false);
                       }}
-                      className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
-                        sort === key
-                          ? "text-primary font-semibold bg-primary/5"
-                          : "text-gray-700 hover:bg-gray-50"
-                      }`}
+                      className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${sort === key
+                        ? "text-primary font-semibold bg-primary/5"
+                        : "text-gray-700 hover:bg-gray-50"
+                        }`}
                     >
                       {label}
                     </button>
@@ -150,11 +143,10 @@ export default function AgentPage() {
                 setFilterOpen((p) => !p);
                 setSortOpen(false);
               }}
-              className={`relative flex items-center gap-1.5 px-3 py-2 border rounded-xl text-sm font-medium transition-all shadow-sm ${
-                filterOpen || activeFilters > 0
-                  ? "bg-primary border-primary text-white"
-                  : "bg-white border-gray-200 text-gray-600 hover:border-primary/40"
-              }`}
+              className={`relative flex items-center gap-1.5 px-3 py-2 text-sm font-medium transition-colors ${filterOpen || activeFilters > 0
+                ? "bg-primary text-white"
+                : "text-gray-600 hover:text-primary hover:bg-gray-50"
+                }`}
             >
               <SlidersHorizontal size={14} />
               Filter
@@ -164,6 +156,24 @@ export default function AgentPage() {
                 </span>
               )}
             </button>
+
+            {/* Dashboard */}
+            <Link
+              href="/agent/dashboard"
+              className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-600 hover:text-primary hover:bg-gray-50 transition-colors"
+            >
+              <LayoutDashboard size={14} />
+              <span className="hidden sm:inline">Dasbor</span>
+            </Link>
+
+            {/* Create Product */}
+            <Link
+              href="/agent/create"
+              className="flex items-center gap-1.5 px-3 py-2 text-sm font-semibold text-primary hover:bg-primary/5 transition-colors rounded-r-xl"
+            >
+              <PlusCircle size={14} />
+              <span className="hidden sm:inline">Jual Produk</span>
+            </Link>
           </div>
         </div>
 
@@ -181,11 +191,10 @@ export default function AgentPage() {
                     <button
                       key={loc}
                       onClick={() => setLocation(loc)}
-                      className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
-                        location === loc
-                          ? "bg-primary text-white"
-                          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                      }`}
+                      className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${location === loc
+                        ? "bg-primary text-white"
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                        }`}
                     >
                       {loc}
                     </button>
@@ -293,7 +302,7 @@ export default function AgentPage() {
 
         {/* Grid */}
         {filtered.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filtered.map((product, i) => (
               <AgentCard
                 key={product.id}
