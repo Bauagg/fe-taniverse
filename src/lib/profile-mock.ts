@@ -4,6 +4,9 @@ export const mockUser: User = {
   name: "Mambaus Baus",
   email: "baus@gmail.com",
   initials: "MB",
+  posts: 24,
+  followers: 138,
+  following: 57,
 };
 
 export const profileFields: ProfileField[] = [

@@ -3,6 +3,7 @@ export interface Seller {
   name: string;
   location: string;
   rating: number;
+  phone?: string;
 }
 
 export interface AgentProduct {
