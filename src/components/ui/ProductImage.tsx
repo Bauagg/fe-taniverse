@@ -1,3 +1,5 @@
+import Image, { StaticImageData } from "next/image";
+
 const PALETTES = [
   { from: "from-green-700", to: "to-green-950", emoji: "🌾" },
   { from: "from-red-700", to: "to-red-950", emoji: "🌶️" },
@@ -16,19 +18,32 @@ function pickPalette(name?: string) {
 }
 
 interface Props {
+  src?: StaticImageData | string;
   name?: string;
   emoji?: string;
   className?: string;
 }
 
-export default function ProductImage({ name, emoji, className = "" }: Props) {
+export default function ProductImage({ src, name, emoji, className = "" }: Props) {
+  if (src) {
+    return (
+      <div className={`relative w-full h-full overflow-hidden ${className}`}>
+        <Image
+          src={src}
+          alt={name ?? "product"}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 50vw"
+        />
+      </div>
+    );
+  }
+
   const palette = pickPalette(name);
   const icon = emoji ?? palette.emoji;
 
   return (
-    <div
-      className={`w-full h-full bg-linear-to-br ${palette.from} ${palette.to} flex items-center justify-center ${className}`}
-    >
+    <div className={`w-full h-full bg-linear-to-br ${palette.from} ${palette.to} flex items-center justify-center ${className}`}>
       <span className="text-5xl opacity-70 select-none">{icon}</span>
     </div>
   );

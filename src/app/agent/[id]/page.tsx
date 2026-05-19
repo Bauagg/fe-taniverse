@@ -6,6 +6,7 @@ import { getProductById } from "@/lib/agent-mock";
 import { IconMapPin } from "@/assets/icons";
 import StarRating from "@/components/ui/StarRating";
 import ProductImage from "@/components/ui/ProductImage";
+import bawangImg from "@/assets/image/bawang.jpg";
 
 function formatPrice(price: number) {
   return `Rp ${price.toLocaleString("id-ID")}`;
@@ -41,13 +42,14 @@ export default function AgentDetailPage() {
 
         {/* Left — Image */}
         <div className="space-y-3">
-          <ProductImage className="w-full aspect-square rounded-2xl overflow-hidden" emoji="🧅" />
+          <ProductImage src={bawangImg} name={product.name} className="w-full aspect-square rounded-2xl overflow-hidden" />
           <div className="grid grid-cols-4 gap-2">
             {[...Array(4)].map((_, i) => (
               <ProductImage
                 key={i}
+                src={bawangImg}
+                name={product.name}
                 className="w-full aspect-square rounded-xl overflow-hidden opacity-60 hover:opacity-100 cursor-pointer transition-opacity"
-                emoji="🧅"
               />
             ))}
           </div>

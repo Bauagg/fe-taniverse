@@ -6,6 +6,7 @@ import { getProductById } from "@/lib/agent-mock";
 import { IconMapPin } from "@/assets/icons";
 import StarRating from "@/components/ui/StarRating";
 import ProductImage from "@/components/ui/ProductImage";
+import bawangImg from "@/assets/image/bawang.jpg";
 import ConfirmationForm from "@/components/agent/ConfirmationForm";
 
 function formatPrice(price: number) {
@@ -44,7 +45,7 @@ export default function ConfirmPage() {
         {/* Left — Product summary */}
         <div className="lg:col-span-2 space-y-4">
           <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
-            <ProductImage className="w-full aspect-video" emoji="🧅" />
+            <ProductImage src={bawangImg} name={product.name} className="w-full aspect-video" />
             <div className="p-5">
               <h2 className="text-lg font-bold text-gray-800 mb-1">{product.name}</h2>
               <StarRating rating={product.seller.rating} size={13} />

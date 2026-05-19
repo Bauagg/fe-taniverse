@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { MapPin, Bookmark } from "lucide-react";
+import { MapPin, Heart, ShoppingCart, Flame, BadgePlus } from "lucide-react";
 import type { AgentProduct } from "@/types/agent";
 import StarRating from "@/components/ui/StarRating";
 import ProductImage from "@/components/ui/ProductImage";
+import bawangImg from "@/assets/image/bawang.jpg";
 
 interface Props {
   product: AgentProduct;
@@ -15,69 +16,78 @@ function formatPrice(price: number) {
 
 export default function AgentCard({ product, badge }: Props) {
   return (
-    <Link href={`/agent/${product.id}`} className="group block">
-      <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-primary/20 hover:shadow-xl hover:-translate-y-1 transition-all duration-200">
+    <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group flex flex-col">
 
-        {/* Image */}
-        <div className="relative aspect-square overflow-hidden">
-          <ProductImage name={product.name} className="w-full h-full" />
+      {/* Image */}
+      <div className="relative overflow-hidden">
+        <Link href={`/agent/${product.id}`}>
+          <div className="aspect-[4/3] w-full overflow-hidden">
+            <ProductImage src={bawangImg} name={product.name} className="w-full h-full group-hover:scale-105 transition-transform duration-300" />
+          </div>
+        </Link>
 
-          {badge === "hot" && (
-            <span className="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
-              🔥 HOT
-            </span>
-          )}
-          {badge === "baru" && (
-            <span className="absolute top-2 left-2 bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
-              ✨ BARU
-            </span>
-          )}
-
-          <span className="absolute bottom-2 left-2 bg-black/40 backdrop-blur-sm text-white text-[10px] font-semibold px-2 py-0.5 rounded-full">
-            {product.category}
+        {badge === "hot" && (
+          <span className="absolute top-3 left-3 bg-red-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1">
+            <Flame size={11} className="fill-white" /> HOT
           </span>
+        )}
+        {badge === "baru" && (
+          <span className="absolute top-3 left-3 bg-primary text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1">
+            <BadgePlus size={12} /> BARU
+          </span>
+        )}
 
-          <button
-            onClick={(e) => e.preventDefault()}
-            className="absolute top-2 right-2 w-7 h-7 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-white transition-all opacity-0 group-hover:opacity-100 shadow-sm"
-          >
-            <Bookmark size={13} />
-          </button>
-        </div>
+        <button
+          onClick={(e) => e.preventDefault()}
+          className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 transition-all shadow-md"
+        >
+          <Heart size={15} />
+        </button>
 
-        {/* Content */}
-        <div className="p-3">
-          <h3 className="text-sm font-bold text-gray-800 line-clamp-2 leading-snug mb-1.5 group-hover:text-primary transition-colors min-h-[2.5rem]">
+        <span className="absolute bottom-3 left-3 bg-white/90 text-gray-700 text-[11px] font-semibold px-2.5 py-1 rounded-full shadow-sm border border-gray-100">
+          {product.category}
+        </span>
+      </div>
+
+      {/* Content */}
+      <div className="p-4 flex flex-col flex-1">
+        <Link href={`/agent/${product.id}`}>
+          <h3 className="font-bold text-gray-900 mb-1.5 group-hover:text-primary transition-colors leading-snug line-clamp-2">
             {product.name}
           </h3>
+        </Link>
 
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-[11px] text-gray-400">
-              Stok {product.quantity} {product.unit}
-            </p>
-            <StarRating rating={product.seller.rating} size={10} />
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-xs text-gray-500">Stok {product.quantity} {product.unit}</span>
+          <span className="w-1 h-1 bg-gray-300 rounded-full" />
+          <StarRating rating={product.seller.rating} size={11} />
+        </div>
+
+        <p className="text-lg font-extrabold text-primary mb-3">
+          {formatPrice(product.price)}
+        </p>
+
+        <div className="flex items-center gap-2 mb-4 mt-auto">
+          <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+            <span className="text-[10px] font-bold text-primary">{product.seller.name.charAt(0)}</span>
           </div>
-
-          <p className="text-base font-bold text-primary mb-2.5">
-            {formatPrice(product.price)}
-          </p>
-
-          <div className="border-t border-gray-50 pt-2 space-y-1">
-            <div className="flex items-center gap-1.5">
-              <div className="w-4 h-4 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                <span className="text-[8px] font-bold text-primary">
-                  {product.seller.name.charAt(0)}
-                </span>
-              </div>
-              <span className="text-[11px] text-gray-600 truncate font-medium">{product.seller.name}</span>
-            </div>
+          <div className="min-w-0">
+            <p className="text-xs font-semibold text-gray-700 truncate">{product.seller.name}</p>
             <div className="flex items-center gap-1 text-gray-400">
               <MapPin size={10} className="shrink-0" />
               <span className="text-[11px] truncate">{product.seller.location}</span>
             </div>
           </div>
         </div>
+
+        <Link
+          href={`/agent/${product.id}`}
+          className="flex items-center justify-center gap-2 w-full py-2.5 border-2 border-primary text-primary text-sm font-semibold rounded-xl hover:bg-primary hover:text-white transition-all duration-200"
+        >
+          <ShoppingCart size={15} />
+          Lihat Detail
+        </Link>
       </div>
-    </Link>
+    </div>
   );
 }
